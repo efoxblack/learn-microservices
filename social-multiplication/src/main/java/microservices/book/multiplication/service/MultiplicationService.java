@@ -4,6 +4,7 @@ import microservices.book.multiplication.domain.Multiplication;
 import microservices.book.multiplication.domain.MultiplicationResultAttempt;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MultiplicationService {
 
@@ -24,8 +25,17 @@ public interface MultiplicationService {
     /**
      * Gets the statistics for a given user.
      *
-     * @param userAlias the end-user's alias
+     * @param userAlias the user's alias
      * @return a list of {@link MultiplicationResultAttempt} objects, being the past attempts of the user.
      */
-    List<MultiplicationResultAttempt> getStatsForUser(String userAlias);
+    List<MultiplicationResultAttempt> getStatsForUser(final String userAlias);
+
+    /**
+     * Gets an attempt by its id
+     *
+     * @param resultId the identifier of the attempt
+     * @return the {@link MultiplicationResultAttempt} object matching the id, otherwise null.
+     */
+    Optional<MultiplicationResultAttempt> getResultById(final Long resultId);
+
 }

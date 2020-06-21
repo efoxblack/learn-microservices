@@ -1,8 +1,5 @@
 package microservices.book.multiplication.controller;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import microservices.book.multiplication.domain.MultiplicationResultAttempt;
 import microservices.book.multiplication.service.MultiplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class provides a REST API to POST the attempts from users.
  */
 @RestController
 @RequestMapping("/results")
-public final class MultiplicationResultAttemptController {
+final class MultiplicationResultAttemptController {
 
     private final MultiplicationService multiplicationService;
 
@@ -28,7 +26,6 @@ public final class MultiplicationResultAttemptController {
     @PostMapping
     ResponseEntity<MultiplicationResultAttempt> postResult(@RequestBody MultiplicationResultAttempt multiplicationResultAttempt) {
         boolean isCorrect = multiplicationService.checkAttempt(multiplicationResultAttempt);
-
         MultiplicationResultAttempt attemptCopy = new MultiplicationResultAttempt(
                 multiplicationResultAttempt.getUser(),
                 multiplicationResultAttempt.getMultiplication(),
@@ -40,8 +37,16 @@ public final class MultiplicationResultAttemptController {
 
     @GetMapping
     ResponseEntity<List<MultiplicationResultAttempt>> getStatistics(@RequestParam("alias") String alias) {
-        return ResponseEntity.ok(multiplicationService.getStatsForUser(alias));
+        return ResponseEntity.ok(
+                multiplicationService.getStatsForUser(alias)
+        );
     }
 
+    @GetMapping("/{resultId}")
+    ResponseEntity<Optional<MultiplicationResultAttempt>> getResultById(final @PathVariable("resultId") Long resultId) {
+        return ResponseEntity.ok(
+                multiplicationService.getResultById(resultId)
+        );
+    }
 
 }
